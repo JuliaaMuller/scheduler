@@ -35,7 +35,7 @@ return props.onCancel;
   </section>
   <section className="appointment__card-right">
     <section className="appointment__actions">
-      <Button danger onCancel={cancel}>Cancel</Button>
+      <Button danger onClick={props.onCancel}>Cancel</Button>
       <Button confirm onSave={props.onSave}>Save</Button>
     </section>
   </section>
