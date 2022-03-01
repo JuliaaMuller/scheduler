@@ -33,19 +33,17 @@ export default function Application () {
   function bookInterview (id, interview) {
     const appointment = {...state.appointments[id], interview: { ...interview }};
     const appointments = {...state.appointments, [id]: appointment};
-    axios.put(`/api/appointments/${id}`, { ...appointment }) // To add a new appointment in the database API ; 
+    return axios.put(`/api/appointments/${id}`, { ...appointment }) // To add a new appointment in the database API ; 
       .then((response) => {})
       .catch((error) => console.log(error));
-    setState({...state, appointments}); 
   };
 
-  function deleteItw (id) {
+  function cancelInterview(id) {
     const appointment = {...state.appointments[id], interview: null};
     const appointments = {...state.appointments, [id]: appointment};
-    axios.delete(`api/appointments/${id}`, { ...appointment }) // To delete an appointment with its ID in the database API ; 
+    return axios.delete(`api/appointments/${id}`, { ...appointment }) // To delete an appointment with its ID in the database API ; 
       .then((response) => {})
       .catch((error) => console.log(error));
-    setState({...state, appointments});
   };
 
   const eachAppointement = appointementByDay.map((appointment) => {
@@ -58,7 +56,7 @@ export default function Application () {
         interview={interview}
         state={state}
         bookInterview={bookInterview}
-        deleteItw={deleteItw}
+        cancelInterview={cancelInterview}
       />
     );
   });

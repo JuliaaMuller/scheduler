@@ -4,10 +4,12 @@ import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
 import Confirm from "./Confirm";
+import Error from "./Error";
+import Status from "./Status";
 import useVisualMode from "hooks/useVisualMode";
 import { getInterviewersForDay } from "helpers/selectors";
 import "components/Appointment/styles.scss";
-import Status from "./Status";
+
 
 // Define all the mode to be displayed in each schedule case ; To switch modes ; 
 const EMPTY = "EMPTY";
@@ -15,33 +17,33 @@ const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
 const CONFIRM = "CONFIRM";
-const DELETE = "DELETE";
+const DELETING = "DELETING";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment (props) {
-  const { time, interview, state, bookInterview, id, deleteItw } = props;
+  const { time, interview, state, bookInterview, id, cancelInterview } = props;
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY); // Initial mode ;
 
   function save(name, interviewer) {
     const interview = {student: name, interviewer};
     transition(SAVING);
-    setTimeout(() => {
-      bookInterview(id, interview);
-      transition(SHOW);
-    }, 1000);
-  }; // To save a new appointment or an edited one ; and simulate the response time ; 
-
+      bookInterview(id, interview)
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVE, true))
+  }; // To save a new appointment or an edited one ; 
+  
   function deleteApt(){transition(CONFIRM)}; // To switch from the delete button to the confirm mode ; 
 
   function edit(){transition(EDIT)}; // To switch from the edit button to the edit mode ;
 
   function confirmDelete(id) {
-    transition(DELETE);
-    setTimeout(() => {
-      deleteItw(id);
-      transition(EMPTY);
-    }, 1000);
-  }; // // To confirm the delete appointment ; and simulate the response time ; 
+    transition(DELETING, true);
+     cancelInterview(id)
+     .then(() => transition(EMPTY))
+     .catch(() => transition(ERROR_DELETE, true))
+  }; // To confirm the delete appointment ; 
 
   return (
     <article className="appointment">
@@ -62,7 +64,7 @@ export default function Appointment (props) {
           onConfirm={confirmDelete}
           id={id}
         />}
-      {mode === DELETE && <Status message={"Deleting..."} />}
+      {mode === DELETING && <Status message={"Deleting..."} />}
       {mode === EDIT && 
         <Form
           interviewers={getInterviewersForDay(state, state.day)}
@@ -70,6 +72,12 @@ export default function Appointment (props) {
           onSave={save}
           student={interview.student}
           interviewer={interview.interviewer.id}
+        />}
+        {mode === ERROR_SAVE &&
+        <Error message = {ERROR_SAVE} onClose={back}
+        />}
+         {mode === ERROR_DELETE &&
+        <Error message = {ERROR_DELETE} onClose={back}
         />}
     </article>
   );
