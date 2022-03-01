@@ -23,10 +23,11 @@ export function getInterview(state, interview) {
 }
 
 export function getInterviewersForDay(state, day) {
-  const clickedDay = state.days.find((dayName) => dayName.name === day);
-  
-  if (clickedDay) {
-    return clickedDay.interviewers.map(id => state.interviewers[id]);
+  let result =[];
+  const clickedDay = state.days.find((item) => item.name === day);
+  if (!clickedDay) {
+    return result
   }
-  return [];
+  clickedDay.interviewers.forEach(id => { result.push(state.interviewers[id])})
+  return result
 }; 
