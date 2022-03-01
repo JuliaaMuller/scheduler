@@ -1,25 +1,26 @@
-import {useState} from 'react';
+import { useState } from "react";
 
-export default function useVisualMode(initial) {
+const useVisualMode = initial => {
   const [mode, setMode] = useState(initial);
-
   const [history, setHistory] = useState([initial]);
 
-  function transition (newMode, replace = false) {
-    if (replace) back();
-    setHistory((prev) => [...prev, newMode]);
-    return setMode(newMode);
+  const transition = (newMode, replace = false) => {
+    setMode(newMode);
+    if (replace) setHistory(prev => prev.slice(0, prev.length - 1));
+    setHistory(prev => [...prev, newMode]);
   };
+
   const back = () => {
     if (history.length > 1) {
-      const newHistory = [...history.slice(0, history.length - 1)]; // alternate way is to use push and pop
-      setHistory(newHistory);
-      setMode(newHistory[newHistory.length - 1]);
+      setHistory(prev => {
+        const newHistory = prev.slice(0, prev.length - 1);
+        setMode(newHistory[newHistory.length - 1]);
+        return newHistory;
+      });
     }
   };
 
   return { mode, transition, back };
-}
-// function transition (newMode) {
-//   setMode(newMode)
-// }
+};
+
+export default useVisualMode;

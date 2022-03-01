@@ -1,13 +1,19 @@
-
 import React from "react";
 import DayListItem from "./DayListItem";
 
+// Component that displays each day on the side bar ; 
 export default function DayList(props) {
-  const daily = props.days.map(days => <DayListItem key={days.id} name={days.name} spots={days.spots} selected={days.name === props.value} setDay={props.onChange} {...days}/>);                         
+  const eachDay = props.days.map((day) => (
+    <DayListItem
+      key={day.id}
+      name={props.value}
+      setDay={() => props.onChange(day.name)}
+      selected={props.value === day.name}
+      {...day}/>
+  ));
   return (
     <ul>
-      {daily}
+      {eachDay}
     </ul>
   );
 }
-
