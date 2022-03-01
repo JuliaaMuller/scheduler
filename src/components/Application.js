@@ -1,59 +1,25 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import "components/Application.scss";
 import axios from "axios";
+import useApplicationData from "hooks/useApplicationData";
 
 export default function Application () {
-  function setDay(day) {setState((prev) => ({ ...prev, day }))}; // To update the current day displayed ; 
-
-  const [state, setState] = useState({day: "Monday", days: [], appointments: {}, interviewers: {}}); 
-  
+  const {state, setDay, bookInterview, cancelInterview} = useApplicationData();
   const appointementByDay = getAppointmentsForDay(state, state.day); // To show all the appointments for a selected day ; 
-
-  useEffect(() => {
-    Promise.all([
-      axios.get("/api/days"),
-      axios.get("/api/appointments"),
-      axios.get("/api/interviewers"),
-    ])
-    .then((all) => {
-      const [days, appointments, interviewers] = all;
-      // To update the last values for days appointments and interviewers from the API ; 
-      setState((prev) => ({
-        ...prev,
-        days: days.data,
-        appointments: appointments.data,
-        interviewers: interviewers.data,
-      }));
-    });
-  }, []);
-
-  function bookInterview (id, interview) {
-    const appointment = {...state.appointments[id], interview: { ...interview }};
-    const appointments = {...state.appointments, [id]: appointment};
-    return axios.put(`/api/appointments/${id}`, { ...appointment }) // To add a new appointment in the database API ; 
-      .then((response) => {})
-      .catch((error) => console.log(error));
-  };
-
-  function cancelInterview(id) {
-    const appointment = {...state.appointments[id], interview: null};
-    const appointments = {...state.appointments, [id]: appointment};
-    return axios.delete(`api/appointments/${id}`, { ...appointment }) // To delete an appointment with its ID in the database API ; 
-      .then((response) => {})
-      .catch((error) => console.log(error));
-  };
-
+  const interviewersByDay = getInterviewersForDay(state, state.day);
+  
   const eachAppointement = appointementByDay.map((appointment) => {
-    const interview = getInterview(state, appointment.interview); // To find an interview within its ID ;
+    const interview = getInterview(state, appointment.interview); // To find an interview with its ID ;
     return (
       <Appointment
         key={appointment.id}
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={interviewersByDay}
         state={state}
         bookInterview={bookInterview}
         cancelInterview={cancelInterview}

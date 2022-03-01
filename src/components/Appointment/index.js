@@ -28,23 +28,23 @@ export default function Appointment (props) {
 
   function save(name, interviewer) {
     const interview = {student: name, interviewer};
-    transition(SAVING);
+    transition(SAVING)
       bookInterview(id, interview)
       .then(() => transition(SHOW))
-      .catch(error => transition(ERROR_SAVE, true))
-  }; // To save a new appointment or an edited one ; 
-  
+      .catch(error => console.log(error))
+  }// To save a new appointment or an edited one ; 
+
   function deleteApt(){transition(CONFIRM)}; // To switch from the delete button to the confirm mode ; 
 
   function edit(){transition(EDIT)}; // To switch from the edit button to the edit mode ;
 
-  function confirmDelete(id) {
+  function confirmDelete() {
     transition(DELETING, true);
      cancelInterview(id)
      .then(() => transition(EMPTY))
-     .catch(() => transition(ERROR_DELETE, true))
+     .catch((error) => transition(ERROR_DELETE, true))
   }; // To confirm the delete appointment ; 
-
+  
   return (
     <article className="appointment">
       <Header time={time} />
@@ -61,7 +61,7 @@ export default function Appointment (props) {
       {mode === CONFIRM && 
         <Confirm
           message={"Are you sure that you want to delete this appointement?"}
-          onConfirm={confirmDelete}
+          onConfirm={()=> confirmDelete()}
           id={id}
         />}
       {mode === DELETING && <Status message={"Deleting..."} />}
@@ -81,4 +81,5 @@ export default function Appointment (props) {
         />}
     </article>
   );
-};
+}
+
