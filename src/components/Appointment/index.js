@@ -32,7 +32,7 @@ export default function Appointment (props) {
       bookInterview(id, interview)
       .then(() => transition(SHOW))
       .catch(error => console.log(error))
-  }// To save a new appointment or an edited one ; 
+  };// To save a new appointment or an edited one ; 
 
   function deleteApt(){transition(CONFIRM)}; // To switch from the delete button to the confirm mode ; 
 
@@ -55,15 +55,13 @@ export default function Appointment (props) {
         <Form
           interviewers={getInterviewersForDay(state, state.day)}
           onCancel={back}
-          onSave={save}
-        />}
+          onSave={save}/>}
       {mode === SAVING && <Status message={"Saving..."} />}
       {mode === CONFIRM && 
         <Confirm
           message={"Are you sure that you want to delete this appointement?"}
           onConfirm={()=> confirmDelete()}
-          id={id}
-        />}
+          id={id}/>}
       {mode === DELETING && <Status message={"Deleting..."} />}
       {mode === EDIT && 
         <Form
@@ -71,14 +69,11 @@ export default function Appointment (props) {
           onCancel={back}
           onSave={save}
           student={interview.student}
-          interviewer={interview.interviewer.id}
-        />}
+          interviewer={interview.interviewer.id}/>}
         {mode === ERROR_SAVE &&
-        <Error message = {ERROR_SAVE} onClose={back}
-        />}
+        <Error message = {ERROR_SAVE} onClose={back}/>}
          {mode === ERROR_DELETE &&
-        <Error message = {ERROR_DELETE} onClose={back}
-        />}
+        <Error message = {ERROR_DELETE} onClose={back}/>}
     </article>
   );
 }
