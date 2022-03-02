@@ -1,6 +1,6 @@
 import React from "react";
 
-export default (props) => {
+export default function Header(props) {
   const { time } = props;
   return (
     <header className="appointment__time">

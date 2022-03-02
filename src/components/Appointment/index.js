@@ -60,7 +60,8 @@ export default function Appointment (props) {
       {mode === CONFIRM && 
         <Confirm
           message={"Are you sure that you want to delete this appointement?"}
-          onConfirm={()=> confirmDelete()}
+          onConfirm={()=> confirmDelete()} 
+          onCancel={back}
           id={id}/>}
       {mode === DELETING && <Status message={"Deleting..."} />}
       {mode === EDIT && 
