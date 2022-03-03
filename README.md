@@ -48,5 +48,16 @@ npm test
 ```sh
 npm run storybook
 ```
+## Screenshots
+!["initial_view"](https://github.com/JuliaaMuller/scheduler/blob/master/docs/initial_view.png?raw=true)
+
+!["create_view"](https://github.com/JuliaaMuller/scheduler/blob/master/docs/create_view.png?raw=true)
+
+!["confirm_view"](https://github.com/JuliaaMuller/scheduler/blob/master/docs/confirm_view.png?raw=true)
+
+!["edit_view"](https://github.com/JuliaaMuller/scheduler/blob/master/docs/edit_view.png?raw=true)
+
+!["final_view"](https://github.com/JuliaaMuller/scheduler/blob/master/docs/final_view.png?raw=true)
+
 
 
