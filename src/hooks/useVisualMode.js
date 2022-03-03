@@ -1,26 +1,24 @@
 import { useState } from "react";
 
-const useVisualMode = initial => {
+export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial]);
-
-  const transition = (newMode, replace = false) => {
+// Function to switch between the different modes (CREATE, EMPTY, CONFIRM, EDIT, ERROR).
+  function transition(newMode, replace = false) {
     setMode(newMode);
     if (replace) setHistory(prev => prev.slice(0, prev.length - 1));
     setHistory(prev => [...prev, newMode]);
   };
-
-  const back = () => {
+// Function allowing user to go back to the previous state skipping STATUS and CONFIRM mode .
+  function back() {
     if (history.length > 1) {
-      setHistory(prev => {
+      setHistory((prev) => {
         const newHistory = prev.slice(0, prev.length - 1);
         setMode(newHistory[newHistory.length - 1]);
         return newHistory;
       });
     }
   };
-
   return { mode, transition, back };
 };
 
-export default useVisualMode;

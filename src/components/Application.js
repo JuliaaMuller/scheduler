@@ -1,15 +1,14 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment} from "react";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import "components/Application.scss";
-import axios from "axios";
 import useApplicationData from "hooks/useApplicationData";
 
 export default function Application () {
   const {state, setDay, bookInterview, cancelInterview} = useApplicationData();
   const appointementByDay = getAppointmentsForDay(state, state.day); // To show all the appointments for a selected day ; 
-  const interviewersByDay = getInterviewersForDay(state, state.day);
+  const interviewersByDay = getInterviewersForDay(state, state.day); // To show all the interviewers for a selected day ; 
   
   const eachAppointement = appointementByDay.map((appointment) => {
     const interview = getInterview(state, appointment.interview); // To find an interview with its ID ;

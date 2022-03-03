@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import Button from "components/Button";
 import InterviewerList from "components/InterviewerList";
-import { render } from "@testing-library/react";
 
-
+// Component for the CREATE and EDIT mode.
 export default function Form (props) {
   
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
 
+  // Reset function that reinitialize student and interviewer when the cancel button is clicked
   function reset() {
     setStudent("");
     setInterviewer(null);
@@ -21,10 +21,15 @@ export default function Form (props) {
     props.onCancel();
   };
 
+  // Handle the submit action when Save is clicked and check if neither Student nor Interviewer are empty
   function submit(event) {
     event.preventDefault();
     if (!student) {
-    setError("Student name cannot be blank")
+    setError("Student name cannot be blank");
+    return
+    }
+    if (!interviewer) {
+    setError("You must select an interviewer");
     return 
     }
     setError("");

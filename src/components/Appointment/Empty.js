@@ -1,6 +1,6 @@
 import React from "react";
 
-
+// Component for the Empty diplay with only a Add button.
 export default function Empty (props) {
   return (
 <main className="appointment__add">

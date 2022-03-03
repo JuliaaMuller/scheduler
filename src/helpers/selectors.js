@@ -17,17 +17,19 @@ export function getInterview(state, interview) {
   if (!interview) {
     return null;
   }
-  interview.interviewer = { ...state.interviewers[interview.interviewer]}
- //change and "destruct" the interviewer value inside the interview argument with the full interviewer object
-  return interview
+ // Change and "destruct" the interviewer value inside the interview argument with the full interviewer object ;
+  return {
+    student:interview.student, 
+    interviewer:state.interviewers[interview.interviewer]
+  };
 }
 
 export function getInterviewersForDay(state, day) {
   let result =[];
   const clickedDay = state.days.find((item) => item.name === day);
   if (!clickedDay) {
-    return result
+    return result;
   }
-  clickedDay.interviewers.forEach(id => { result.push(state.interviewers[id])})
-  return result
+  clickedDay.interviewers.forEach(id => { result.push(state.interviewers[id])});
+  return result;
 }; 

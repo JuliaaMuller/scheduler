@@ -16,21 +16,28 @@ useEffect(() => {
   .then((all) => {
     const [days, appointments, interviewers] = all;
     // To update the last values for days appointments and interviewers from the API ; 
-    setState((prev) => ({
+    setState((prev) => {
+    return {
       ...prev,
       days: days.data,
       appointments: appointments.data,
       interviewers: interviewers.data,
-    }));
+    }
+  });
   });
 }, []);
 
-function bookInterview (id, interview) {
+function bookInterview (id, interview, edit) {
   const appointment = {...state.appointments[id], interview: { ...interview }};
   const appointments = {...state.appointments, [id]: appointment};
   return axios.put(`http://localhost:8001/api/appointments/${id}`, {interview: { ...interview} }) // To add a new appointment in the database API ; 
   .then((response) => {
-    setState((prev) => ({...prev, appointments}));
+    setState((prev) => {
+    return {...prev, appointments}
+    });
+    if (edit){
+      return
+    }
     updateSpots(id, -1);
   })
     // .catch((error) => console.log(error));
@@ -53,7 +60,7 @@ function updateSpots(id, spotNum) {
   })); // Allows the App to update the spots remaining after a API response when deleting or booking interviews.
 }
   return {state, setDay, bookInterview, cancelInterview};
-}
+};
 
  
 

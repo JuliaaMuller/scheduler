@@ -29,10 +29,18 @@ export default function Appointment (props) {
   function save(name, interviewer) {
     const interview = {student: name, interviewer};
     transition(SAVING)
-      bookInterview(id, interview)
+    // To save a new appointment in the EDIT mode (WITHOUT udpating the spots remaining) ; 
+    if(mode === EDIT) {
+      bookInterview(id, interview, true)
       .then(() => transition(SHOW))
-      .catch(error => console.log(error))
-  };// To save a new appointment or an edited one ; 
+      .catch(error => transition(ERROR_SAVE, true))
+    // To save a new appointment in the CREATE mode (WITH udpating the spots remaining) ; 
+    } else {
+      bookInterview(id, interview, false)
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVE, true))
+    }
+  };
 
   function deleteApt(){transition(CONFIRM)}; // To switch from the delete button to the confirm mode ; 
 
@@ -49,6 +57,7 @@ export default function Appointment (props) {
     <article className="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
+      {/* {console.log("**",interview)} */}
       {mode === SHOW && 
       <Show onDelete={deleteApt} {...interview} id={id} onEdit={edit} />}
       {mode === CREATE && 
